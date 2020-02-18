@@ -181,6 +181,10 @@ class MBStyleGenerator:
 
 
     def run(self):
+        from qgis.core import QgsProject
+        from .src.styleManager import StyleManager
+        sm = StyleManager(QgsProject.instance())
+        print(sm.write_mbstyle())
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
@@ -198,3 +202,5 @@ class MBStyleGenerator:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
+
+

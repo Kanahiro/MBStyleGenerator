@@ -2,10 +2,24 @@ class QmlTranslator:
     def __init__(self, qml_str):
         self.qml_str = qml_str
 
-    def to_mbstyle_paint(self):
+    def mbpaint(self):
         qgs_style = self.parse(self.qml_str)
-        mbstyle = self.qgsstyle_to_mbstyle(qgs_style)
-        return mbstyle
+        mbpaint = self.qgsstyle_to_mbpaint(qgs_style)
+        return mbpaint
+
+    def mbtype(self):
+        qgs_style = self.parse(self.qml_str)
+        qgs_type = qgs_style['symbol']['type']
+        if qgs_type == 'marker':
+            return 'circle'
+        elif qgs_type == 'line':
+            return 'line'
+        elif qgs_type == 'polygon':
+            return 'fill'
+        elif qgs_type == 'raster':
+            return 'raster'
+        else:
+            return qgs_type
 
     def parse(self, qml_str):
         import xml.etree.ElementTree as ET
@@ -22,16 +36,20 @@ class QmlTranslator:
                 props[child.attrib['k']] = child.attrib['v']
         return {'symbol':symbol, 'layer':layer, 'props':props}
 
-    def qgsstyle_to_mbstyle(self, qgs_style):
-        layerType = qgs_style['symbol']['type']
-        mbstyle = {}
-        if layerType == 'marker':
-            mbstyle = self.mbstyle_circle(qgs_style)
-        if layerType == 'line':
-            mbstyle = self.mbstyle_line(qgs_style)
-        return mbstyle
+    def qgsstyle_to_mbpaint(self, qgs_style):
+        mbtype = self.mbtype()
+        mbpaint = {}
+        if mbtype == 'circle':
+            mbpaint = self.mbpaint_circle(qgs_style)
+        elif mbtype == 'line':
+            mbpaint = self.mbpaint_line(qgs_style)
+        elif mbtype == 'fill':
+            mbpaint = self.mbpaint_fill(qgs_style)
+        elif mbtype == 'raster':
+            mbpaint = self.mbpaint_raster(qgs_style)
+        return mbpaint
 
-    def mbstyle_circle(self, qgs_style):
+    def mbpaint_circle(self, qgs_style):
         style = {
             'circle-color':qgs_style['props']['color'],
             'circle-radius':qgs_style['props']['size'],
@@ -39,7 +57,7 @@ class QmlTranslator:
         }
         return style
 
-    def mbstyle_line(self, qgs_style):
+    def mbpaint_line(self, qgs_style):
         style = {
             'line-color' : qgs_style['props']['line_color'],
             'line-width' : qgs_style['props']['line_width'],
@@ -47,9 +65,12 @@ class QmlTranslator:
         }
         return style
 
-    def mbstyle_fill(self, qgs_style):
+    def mbpaint_fill(self, qgs_style):
         style = {
             'fill-color' : qgs_style['props']['fill_color'],
             'fill-opacity' : qgs_style['symbol']['alpha']
         }
         return style
+
+    def mbpaint_raster(self, qgs_style):
+        return {}

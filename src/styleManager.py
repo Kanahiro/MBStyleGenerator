@@ -6,38 +6,43 @@ class StyleManager:
     def __init__(self, project: QgsProject):
         self.project = project
 
-    def export_mbstyle(self, filepath):
-        sources = self.make_mbsources(self.project)
-
+    def write_mbstyle(self, output_path='', vtsource_url=''):
         visible_layers = self._get_visible_layers(self.project)
-        layers = self.make_mblayers(sources['id'], visible_layers)
 
-        mbstyle = {
-            'version':8,
-            'sources':sources,
-            'layers':layers
-        }
-
-        return qmls
-
-    def make_mbstyle(self, project: QgsProject, output_path='', vtsource_url=''):
-        visible_layers = self._get_visible_layers(project)
+        mblayers = []
         vector_layers = []
         raster_layers = []
         for layer in visible_layers:
+            mblayer = {}
+            sm = layer.styleManager()
+            style_qml = sm.style(sm.currentStyle()).xmlData()
+            qmlt = QmlTranslator(style_qml)
             if layer.type() == QgsMapLayer.VectorLayer:
                 vector_layers.append(layer)
+                mblayer = {
+                    'id':layer.id(),
+                    'source':'mvt',
+                    'source-layer':layer.id(),
+                    'type':qmlt.mbtype(),
+                    'paint':qmlt.mbpaint()
+                }
             elif layer.type() == QgsMapLayer.RasterLayer:
                 raster_layers.append(layer)
+                mblayer = {
+                    'id':layer.id(),
+                    'source':layer.id(),
+                    'type':'raster',
+                    'paint':qmlt.mbpaint()
+                }
+            mblayers.append(mblayer)
         
-        sources = {}
-
+        mbsources = {}
         for rlayer in raster_layers:
             if rlayer.providerType == 'wms':
                 rsource = self._make_raster_source(rlayer)
-                sources.update(rsource)
+                mbsources.update(rsource)
 
-        #mvt making process
+        #mvt source making process
         '''
         if vtsource_url == '':
             #generate binary mvt
@@ -52,11 +57,18 @@ class StyleManager:
                 'url':vtsource_url,
             }
         }
-        sources.update(vtsource)
+        mbsources.update(vtsource)
+
+        mbstyle = {
+            'version':8,
+            'sources':mbsources,
+            'layers':mblayers
+        }
+        return mbstyle
+        
 
     def _make_raster_source(self, rlayer:QgsRasterLayer):
-        data_provider = rlayer.dataProvider()
-        metadata = data_provider.dataSourceUri()
+        metadata = rlayer.styleURI()
         params = metadata.split('&')
         provider_data = {}
         for param in params:
