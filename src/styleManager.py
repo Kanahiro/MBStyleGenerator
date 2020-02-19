@@ -8,25 +8,29 @@ class StyleManager:
 
     def write_mbstyle(self, output_path='', vtsource_url=''):
         visible_layers = self._get_visible_layers(self.project)
+        #make layers and source by visible_layers
 
         mblayers = []
         vector_layers = []
         raster_layers = []
+
+        #mapbox layers making
         for layer in visible_layers:
             mblayer = {}
-            sm = layer.styleManager()
-            style_qml = sm.style(sm.currentStyle()).xmlData()
-            qmlt = QmlTranslator(style_qml)
+            ls = QgsMapLayerStyle()
+            ls.readFromLayer(layer)
+            qml_str = ls.xmlData()
+            qmlt = QmlTranslator(qml_str)
             if layer.type() == QgsMapLayer.VectorLayer:
                 vector_layers.append(layer)
                 mblayer = {
                     'id':layer.id(),
                     'source':'mvt',
-                    'source-layer':layer.id(),
+                    'source-layer':layer.name(),
                     'type':qmlt.mbtype(),
                     'paint':qmlt.mbpaint()
                 }
-            elif layer.type() == QgsMapLayer.RasterLayer:
+            elif layer.type() == QgsMapLayer.RasterLayer and layer.providerType() == 'wms':
                 raster_layers.append(layer)
                 mblayer = {
                     'id':layer.id(),
@@ -34,13 +38,13 @@ class StyleManager:
                     'type':'raster',
                     'paint':qmlt.mbpaint()
                 }
-            mblayers.append(mblayer)
+            mblayers.insert(0, mblayer)
         
+        #mapbox sources making
         mbsources = {}
         for rlayer in raster_layers:
-            if rlayer.providerType == 'wms':
-                rsource = self._make_raster_source(rlayer)
-                mbsources.update(rsource)
+            rsource = self._make_raster_source(rlayer)
+            mbsources.update(rsource)
 
         #mvt source making process
         '''
@@ -50,11 +54,10 @@ class StyleManager:
             vtmaker.generateBinaryTiles()
             vtsource_url = r'./tiles/{z}/{x}/{y}.pbf'
         '''
-        
         vtsource = {
             'mvt':{
                 'type':'vector',
-                'url':vtsource_url,
+                'tiles':[vtsource_url],
             }
         }
         mbsources.update(vtsource)
@@ -76,12 +79,12 @@ class StyleManager:
             kv = param.split('=')
             provider_data[kv[0]] = kv[1]
         url = provider_data['url']
+        replaced_url = url.replace('%7B', r'{').replace('%7D', r'}')
         id = rlayer.id()
         rsource = {
             id:{
                 'type':'raster',
-                'url':url,
-                'tileSize':256
+                'tiles':[replaced_url]
             }
         }
         return rsource
