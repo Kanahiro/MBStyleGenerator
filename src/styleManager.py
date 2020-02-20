@@ -57,7 +57,7 @@ class StyleManager:
         vtsource = {
             'mvt':{
                 'type':'vector',
-                'tiles':[vtsource_url],
+                'tiles':[vtsource_url]
             }
         }
         mbsources.update(vtsource)
@@ -84,7 +84,8 @@ class StyleManager:
         rsource = {
             id:{
                 'type':'raster',
-                'tiles':[replaced_url]
+                'tiles':[replaced_url],
+                'tileSize':256
             }
         }
         return rsource

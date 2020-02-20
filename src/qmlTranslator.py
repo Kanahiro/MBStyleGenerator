@@ -73,12 +73,18 @@ class QmlTranslator:
         return mbpaint
 
     def mbpaint_circle(self, qgs_style):
+        import math
         style = {
             'circle-color': self._qgscolor_to_mbcolor(qgs_style['props']['color']),
-            'circle-radius':self._qgssize_to_mbsize(qgs_style['props']['size'], qgs_style['props']['size_unit']),
-            'circle-opacity':float(qgs_style['symbol']['alpha']),
-            'circle-stroke-color':self._qgscolor_to_mbcolor(qgs_style['props']['outline_color'])
+            'circle-radius':math.ceil(0.5 * self._qgssize_to_mbsize(qgs_style['props']['size'], qgs_style['props']['size_unit'])),
+            'circle-opacity':float(qgs_style['symbol']['alpha'])
         }
+        #when outline diabled
+        if qgs_style['props']['outline_style'] == 'no':
+            return style
+        
+        style['circle-stroke-color'] = self._qgscolor_to_mbcolor(qgs_style['props']['outline_color'])
+        style['circle-stroke-width'] = self._qgssize_to_mbsize(qgs_style['props']['outline_width'], qgs_style['props']['outline_width_unit'])
         return style
 
     def mbpaint_line(self, qgs_style):
@@ -119,9 +125,8 @@ class QmlTranslator:
         return opacity
 
     def _qgssize_to_mbsize(self, qgssize, qgsunit):
-        mbsize = 0
+        import math
+        mbsize = 1
         if qgsunit == 'MM':
-            mbsize = int(float(qgssize) * 2.83465)
-        if mbsize < 1:
-            mbsize = 1
+            mbsize = mbsize + math.floor(float(qgssize) * 2.83465)
         return mbsize
