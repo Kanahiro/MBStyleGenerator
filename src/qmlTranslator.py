@@ -79,12 +79,10 @@ class QmlTranslator:
             'circle-radius':math.ceil(0.5 * self._qgssize_to_mbsize(qgs_style['props']['size'], qgs_style['props']['size_unit'])),
             'circle-opacity':float(qgs_style['symbol']['alpha'])
         }
-        #when outline diabled
-        if qgs_style['props']['outline_style'] == 'no':
-            return style
-        
-        style['circle-stroke-color'] = self._qgscolor_to_mbcolor(qgs_style['props']['outline_color'])
-        style['circle-stroke-width'] = self._qgssize_to_mbsize(qgs_style['props']['outline_width'], qgs_style['props']['outline_width_unit'])
+        #when outline enable
+        if qgs_style['props']['outline_style'] != 'no':
+            style['circle-stroke-color'] = self._qgscolor_to_mbcolor(qgs_style['props']['outline_color'])
+            style['circle-stroke-width'] = self._qgssize_to_mbsize(qgs_style['props']['outline_width'], qgs_style['props']['outline_width_unit'])
         return style
 
     def mbpaint_line(self, qgs_style):
@@ -93,6 +91,12 @@ class QmlTranslator:
             'line-width' : self._qgssize_to_mbsize(qgs_style['props']['line_width'], qgs_style['props']['line_width_unit']),
             'line-opacity' : float(qgs_style['symbol']['alpha'])
         }
+        #line style
+        if qgs_style['props']['line_style'] == 'dash':
+            style['line-dasharray'] = [3,1]
+        if qgs_style['props']['line_style'] == 'dot':
+            style['line-dasharray'] = [1,1]
+
         return style
 
     def mbpaint_fill(self, qgs_style):
