@@ -6,7 +6,7 @@ class StyleManager:
     def __init__(self, project: QgsProject):
         self.project = project
 
-    def write_mbstyle(self, output_path:str, vtsource_url=''):
+    def write_mbstyle(self, output_path:str, vtsource_url=r'http://TILES_HOSTING_URL/{z}/{x}/{y}.pbf', isMVTMakeMode=False):
         import json
         visible_layers = self._get_visible_layers(self.project)
         #make layers and source by visible_layers
@@ -46,13 +46,6 @@ class StyleManager:
         for rlayer in raster_layers:
             rsource = self._make_raster_source(rlayer)
             mbsources.update(rsource)
-
-        #mvt source making process
-        if vtsource_url == '':
-            #generate binary mvt
-            vtmaker = VectorTilesMaker(vector_layers)
-            vtmaker.generateBinaryTiles(output_path)
-            vtsource_url = r'http://TILES_HOSTING_URL/{z}/{x}/{y}.pbf'
         
         vtsource = {
             'mvt':{
@@ -67,10 +60,13 @@ class StyleManager:
             'sources':mbsources,
             'layers':mblayers
         }
-        print(mbstyle)
 
         with open(output_path + '/style.json', 'w') as f:
             json.dump(mbstyle, f, indent=4)
+
+        if isMVTMakeMode:
+            vtmaker = VectorTilesMaker(vector_layers)
+            vtmaker.generateBinaryTiles(output_path)
 
     def _make_raster_source(self, rlayer:QgsRasterLayer):
         metadata = rlayer.styleURI()
