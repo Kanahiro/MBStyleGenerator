@@ -6,7 +6,7 @@ class StyleManager:
     def __init__(self, project: QgsProject):
         self.project = project
 
-    def write_mbstyle(self, output_path, vtsource_url=''):
+    def write_mbstyle(self, output_path:str, vtsource_url=''):
         import json
         visible_layers = self._get_visible_layers(self.project)
         #make layers and source by visible_layers
@@ -27,7 +27,7 @@ class StyleManager:
                 mblayer = {
                     'id':layer.id(),
                     'source':'mvt',
-                    'source-layer':layer.id(),
+                    'source-layer':layer.name(),
                     'type':qmlt.mbtype(),
                     'paint':qmlt.mbpaint()
                 }
@@ -52,7 +52,7 @@ class StyleManager:
             #generate binary mvt
             vtmaker = VectorTilesMaker(vector_layers)
             vtmaker.generateBinaryTiles(output_path)
-            vtsource_url = r'{z}/{x}/{y}.pbf'
+            vtsource_url = r'http://TILES_HOSTING_URL/{z}/{x}/{y}.pbf'
         
         vtsource = {
             'mvt':{
@@ -67,6 +67,7 @@ class StyleManager:
             'sources':mbsources,
             'layers':mblayers
         }
+        print(mbstyle)
 
         with open(output_path + '/style.json', 'w') as f:
             json.dump(mbstyle, f, indent=4)
