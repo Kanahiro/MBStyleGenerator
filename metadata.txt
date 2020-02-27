@@ -5,7 +5,7 @@
 [general]
 name=MBStyleGenerator
 qgisMinimumVersion=3.0
-description=Generate customised MBStyle - style.json, tiles.json, and tiled .PBFs
+description=Generate customised MBStyle - style.json, tiles.json, and also tiled .PBFs
 version=0.1
 author=Kanahiro Iguchi
 email=kanahiro.iguchi@gmail.com
@@ -29,7 +29,7 @@ homepage=https://github.com/Kanahiro
 category=Web
 icon=icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False

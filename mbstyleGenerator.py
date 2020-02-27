@@ -181,10 +181,6 @@ class MBStyleGenerator:
 
 
     def run(self):
-        from qgis.core import QgsProject
-        from .src.styleManager import StyleManager
-        sm = StyleManager(QgsProject.instance())
-        print(sm.write_mbstyle())
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
@@ -195,12 +191,43 @@ class MBStyleGenerator:
 
         # show the dialog
         self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+        self.initDialog()
+        
+    def initDialog(self):
+        openFileDialogButton = self.dlg.openFileDialogButton
+        openFileDialogButton.clicked.connect(self.openFileDialogButtonPushed)
+        runButton = self.dlg.runButton
+        runButton.clicked.connect(self.runButtonPushed)
 
+    def openFileDialogButtonPushed(self):
+        from qgis.PyQt.QtWidgets import QFileDialog
+        filepath = QFileDialog.getExistingDirectory(caption = "Select Directory", directory = '')
+        ##if canceled
+        if not filepath:
+            return
+        self.dlg.stylejson_output.setText(filepath)
 
+    def runButtonPushed(self):
+        from qgis.core import Qgis
+        stylejson_output = self.dlg.stylejson_output.text()
+        mvtsource_url = self.dlg.mvtsource_url.text()
+        makeSourceCheckBox = self.dlg.makeSourceCheckBox.isChecked()
+        if stylejson_output == '':
+            print('output empty')
+            return
+
+        self.generateStyle(output_path=stylejson_output,
+                            mvtsource_url=mvtsource_url,
+                            isMVTmakeMode=makeSourceCheckBox
+                            )
+
+        self.iface.messageBar().pushMessage("Info", "Style.json was correctly saved:" + stylejson_output, Qgis.Info)
+        self.dlg.reject()
+
+    def generateStyle(self, output_path:str, mvtsource_url=r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf', isMVTmakeMode=False):
+        from qgis.core import QgsProject
+        from .src.styleManager import StyleManager
+        from .src.vectorTilesMaker import VectorTilesMaker
+        proj = QgsProject.instance()
+        sm = StyleManager(proj)
+        sm.write_mbstyle(output_path, mvtsource_url, isMVTmakeMode)
