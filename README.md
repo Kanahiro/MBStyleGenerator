@@ -22,6 +22,7 @@ It takes some minuites to make MVT Source, many vector means longer time to make
 - A layer name in MVT Source are same to the name in QGIS project.
 
 ## License
+This plugin use following libraries.
 - [mapbox/tippecanoe](https://github.com/mapbox/tippecanoe)
 - [bartromgens/togeojsontiles](https://github.com/bartromgens/togeojsontiles)
 - [mapbox/mbutil](https://github.com/mapbox/mbutil)
