@@ -20,3 +20,8 @@ It takes some minuites to make MVT Source, many vector means longer time to make
 - This plugin will read only VISIBLE layers on your project, including raster tile.
 - When MVT Source URL are not set and you make MVT Source, you have to set hosting URL of MVT Source on style.json manualy.
 - A layer name in MVT Source are same to the name in QGIS project.
+
+## License
+- [mapbox/tippecanoe](https://github.com/mapbox/tippecanoe)
+- [bartromgens/togeojsontiles](https://github.com/bartromgens/togeojsontiles)
+- [mapbox/mbutil](https://github.com/mapbox/mbutil)
