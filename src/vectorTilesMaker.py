@@ -26,7 +26,7 @@ class VectorTilesMaker:
         )
         mbutil.mbtiles_to_disk(TMP_MBTILES_PATH, output_path, format='pbf', scheme='xyz')
 
-    def write_tmp_geojson(self, layer: QgsVectorLayer):
+    def write_tmp_geojson(self, layer: QgsVectorLayer) -> str:
         filename = TMP_GEOJSON_PATH + '/' + layer.id() + '.geojson'
         crs = QgsCoordinateReferenceSystem()
         crs.createFromUserInput('WGS84')
@@ -38,10 +38,3 @@ class VectorTilesMaker:
             driverName='GeoJSON'
         )
         return filename
-
-    def write_tmp_mbtiles(self, geojson_filepaths:[str], maxzoom, minzoom):
-        togeojsontiles.geojson_to_mbtiles(
-            filepaths=geojson_filepaths,
-            tippecanoe_dir=TIPPECANOE_PATH,
-            mbtiles_file=TMP_MBTILES_PATH
-        )

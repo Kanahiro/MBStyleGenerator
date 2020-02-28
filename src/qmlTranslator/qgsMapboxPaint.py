@@ -5,7 +5,7 @@ class QgsMapboxPaint:
         self.qgs_style = qgs_style
         self.mbtype = mbtype
 
-    def export(self):
+    def export(self) -> dict:
         if self.mbtype == MapboxTypes.CIRCLE.value:
             return self._circle(self.qgs_style)
         elif self.mbtype == MapboxTypes.LINE.value:
@@ -15,7 +15,7 @@ class QgsMapboxPaint:
         elif self.mbtype == MapboxTypes.RASTER.value:
             return self._raster(self.qgs_style)
 
-    def _circle(self, qgs_style):
+    def _circle(self, qgs_style) ->dict:
         import math
         paint = {
             'circle-color': self._qgscolor_to_mbcolor(qgs_style['props']['color']),
@@ -28,7 +28,7 @@ class QgsMapboxPaint:
             paint['circle-stroke-width'] = self._qgssize_to_mbsize(qgs_style['props']['outline_width'], qgs_style['props']['outline_width_unit'])
         return paint
 
-    def _line(self, qgs_style):
+    def _line(self, qgs_style) -> dict:
         paint = {
             'line-color' : self._qgscolor_to_mbcolor(qgs_style['props']['line_color']),
             'line-width' : self._qgssize_to_mbsize(qgs_style['props']['line_width'], qgs_style['props']['line_width_unit']),
@@ -42,7 +42,7 @@ class QgsMapboxPaint:
 
         return paint
 
-    def _fill(self, qgs_style):
+    def _fill(self, qgs_style) -> dict:
         paint = {
             'fill-color' : self._qgscolor_to_mbcolor(qgs_style['props']['color']),
             'fill-outline-color' : self._qgscolor_to_mbcolor(qgs_style['props']['outline_color']),
@@ -50,13 +50,13 @@ class QgsMapboxPaint:
         }
         return paint
 
-    def _raster(self, qgs_style):
+    def _raster(self, qgs_style) -> dict:
         paint = {
             'raster-opacity':float(qgs_style['rasterrenderer']['opacity'])
         }
         return paint
 
-    def _qgscolor_to_mbcolor(self, qgscolor):
+    def _qgscolor_to_mbcolor(self, qgscolor) -> str:
         #qgscolor: rrr,ggg,bbb,aaa 000-255
         #mbcolor: #RRGGBB 00-FF
         rgba = qgscolor.split(',') #[rrr,ggg,bbb,aaa]
@@ -66,14 +66,14 @@ class QgsMapboxPaint:
             mbcolor = mbcolor + str(hexed_color).zfill(2)
         return mbcolor
 
-    def _qgscolor_to_opacity(self, qgscolor):
+    def _qgscolor_to_opacity(self, qgscolor) -> float:
         rgba = qgscolor.split(',') #[rrr,ggg,bbb,aaa]
         opacity = float(rgba[3] / 255)
         return opacity
 
     #qgssize: size * unit
     #mbsize: point
-    def _qgssize_to_mbsize(self, qgssize, qgsunit):
+    def _qgssize_to_mbsize(self, qgssize, qgsunit) -> int:
         import math
         mbsize = 1
         if qgsunit == 'MM':

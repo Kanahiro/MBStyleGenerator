@@ -8,8 +8,7 @@ class StyleManager:
 
     def write_mbstyle(self, output_path:str, vtsource_url:str, isMVTMakeMode:bool):
         import json
-        visible_layers = self._get_visible_layers(self.project)
-        #make layers and source by visible_layers
+        visible_layers = self._get_visible_layers()
 
         mblayers = []
         vector_layers = []
@@ -64,12 +63,11 @@ class StyleManager:
         with open(output_path + '/style.json', 'w') as f:
             json.dump(mbstyle, f, indent=4)
 
-        print(isMVTMakeMode)
         if isMVTMakeMode:
             vtmaker = VectorTilesMaker(vector_layers)
             vtmaker.generateBinaryTiles(output_path + '/pbf')
 
-    def _make_raster_source(self, rlayer:QgsRasterLayer):
+    def _make_raster_source(self, rlayer:QgsRasterLayer) -> dict:
         import urllib.parse
         metadata = rlayer.styleURI()
         params = metadata.split('&')
@@ -90,14 +88,14 @@ class StyleManager:
         }
         return rsource
     
-    def _get_visible_layers(self, project: QgsProject):
+    def _get_visible_layers(self) -> [QgsMapLayer]:
         visible_layers = []
-        for treeLayer in project.layerTreeRoot().findLayers():
+        for treeLayer in self.project.layerTreeRoot().findLayers():
             if treeLayer.isVisible():
                 visible_layers.append(treeLayer.layer())
         return visible_layers
 
-    def _qml_of(self, layer: QgsMapLayer):
-        qgs_style = QgsMapLayerStyle()
-        qgs_style.readFromLayer(layer)
-        return qgs_style.xmlData()
+    def _qml_of(self, layer: QgsMapLayer) -> str:
+        ls = QgsMapLayerStyle()
+        ls.readFromLayer(layer)
+        return ls.xmlData()

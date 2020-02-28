@@ -4,7 +4,7 @@ class QgsMapboxLayout:
         self.qgs_style = qgs_style
         self.mbtype = mbtype
 
-    def export(self):
+    def export(self) -> dict:
         if self.mbtype == MapboxTypes.CIRCLE.value:
             return self._circle(self.qgs_style)
         elif self.mbtype == MapboxTypes.LINE.value:

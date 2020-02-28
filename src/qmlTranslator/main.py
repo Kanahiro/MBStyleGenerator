@@ -7,17 +7,17 @@ class QmlTranslator:
     def __init__(self, qml_str):
         self.qml_str = qml_str
 
-    def mbpaint(self):
+    def mbpaint(self) -> dict:
         qgs_style = self._parse()
         mbtype = self.mbtype()
         return QgsMapboxPaint(qgs_style, mbtype).export()
 
-    def mblayout(self):
+    def mblayout(self) -> dict:
         qgs_style = self._parse()
         mbtype = self.mbtype()
         return QgsMapboxLayout(qgs_style, mbtype).export()
 
-    def mbtype(self):
+    def mbtype(self) -> str:
         qgs_style = self._parse()
         qgs_type = self._qgs_type(qgs_style)
 
@@ -32,7 +32,7 @@ class QmlTranslator:
         else:
             return qgs_type
 
-    def _qgs_type(self, qgs_style):
+    def _qgs_type(self, qgs_style) -> str:
         qgs_type = ''
         if 'rasterrenderer' in qgs_style:
             qgs_type = 'raster'
@@ -40,7 +40,7 @@ class QmlTranslator:
             qgs_type = qgs_style['symbol']['type']
         return qgs_type
 
-    def _parse(self):
+    def _parse(self) -> dict:
         import xml.etree.ElementTree as ET
         root = ET.fromstring(self.qml_str)
         qgs_style = {}
