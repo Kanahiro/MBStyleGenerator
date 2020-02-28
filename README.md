@@ -27,3 +27,6 @@ This plugin use following libraries.
 - [mapbox/tippecanoe](https://github.com/mapbox/tippecanoe)
 - [bartromgens/togeojsontiles](https://github.com/bartromgens/togeojsontiles)
 - [mapbox/mbutil](https://github.com/mapbox/mbutil)
+
+## Classes
+<img src='classes.png'>
