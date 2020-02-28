@@ -2,10 +2,10 @@ import os
 import tempfile
 import json
 from qgis.core import QgsMapLayer, QgsVectorLayer, QgsVectorFileWriter, QgsCoordinateReferenceSystem
-from .exlib.togeojsontiles import togeojsontiles
-from .exlib.mbutil import mbutil
+from .ex_lib.togeojsontiles import togeojsontiles
+from .ex_lib.mbutil import mbutil
 
-TIPPECANOE_PATH = os.path.dirname(__file__) + '/exlib/tippecanoe/'
+TIPPECANOE_PATH = os.path.dirname(__file__) + '/ex_lib/tippecanoe/'
 TMP_MBTILES_PATH = tempfile.gettempdir() + '/tmp.mbtiles'
 TMP_GEOJSON_PATH = tempfile.gettempdir()
 

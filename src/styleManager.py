@@ -46,6 +46,9 @@ class StyleManager:
             rsource = self._make_raster_source(rlayer)
             mbsources.update(rsource)
         
+        if vtsource_url == '':
+            vtsource_url = r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf'
+
         vtsource = {
             'mvt':{
                 'type':'vector',

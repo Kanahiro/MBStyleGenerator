@@ -224,7 +224,7 @@ class MBStyleGenerator:
         self.iface.messageBar().pushMessage("Info", "Style.json was correctly saved:" + stylejson_output, Qgis.Info)
         self.dlg.reject()
 
-    def generateStyle(self, output_path:str, mvtsource_url=r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf', isMVTmakeMode=False):
+    def generateStyle(self, output_path:str, mvtsource_url='', isMVTmakeMode=False):
         from qgis.core import QgsProject
         from .src.styleManager import StyleManager
         from .src.vectorTilesMaker import VectorTilesMaker
