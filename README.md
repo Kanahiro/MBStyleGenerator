@@ -13,6 +13,7 @@ You set some paramaters, following
 - Output Path (style.json will be written)
 - MVT Source Url (.pbf files URL, Optional)
 - Make MVT Source or not
+
 Press Run and style.json will be generated on the directory you choosed.
 It takes some minuites to make MVT Source, many vector means longer time to make.
 
