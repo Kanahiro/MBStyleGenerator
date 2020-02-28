@@ -1,4 +1,5 @@
-from .mapboxTypes import MapboxTypes
+from .types import MapboxTypes, QgsTypes
+
 class QgsMapboxLayout:
     def __init__(self, qgs_style:dict, mbtype:str):
         self.qgs_style = qgs_style

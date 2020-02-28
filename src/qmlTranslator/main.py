@@ -1,5 +1,4 @@
-from .mapboxTypes import MapboxTypes
-from .qgsTypes import QgsTypes
+from .types import MapboxTypes, QgsTypes
 from .qgsMapboxPaint import QgsMapboxPaint
 from .qgsMapboxLayout import QgsMapboxLayout
 
