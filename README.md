@@ -1,3 +1,5 @@
+<img src='sample.png'>
+
 ## Caution
 Now this plugin is EXPERIMENTAL yet.
 Simple object such as Polygon, Line, Point are supported (this mean Text are not supported now).
