@@ -1,4 +1,4 @@
-<img src='sample.png'>
+<img src='img/sample.png'>
 
 ## Caution
 Now this plugin is EXPERIMENTAL yet.
@@ -31,4 +31,4 @@ This plugin use following libraries.
 - [mapbox/mbutil](https://github.com/mapbox/mbutil)
 
 ## Classes
-<img src='classes.png'>
+<img src='img/classes.png'>
