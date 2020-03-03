@@ -41,21 +41,23 @@ class StyleManager:
             mblayers.insert(0, mblayer)
         
         #mapbox sources making
+        ##RASTER
         mbsources = {}
         for rlayer in raster_layers:
             rsource = self._make_raster_source(rlayer)
             mbsources.update(rsource)
         
-        if vtsource_url == '':
-            vtsource_url = r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf'
-
-        vtsource = {
-            'mvt':{
-                'type':'vector',
-                'tiles':[vtsource_url]
+        ##VECTOR
+        if len(vector_layers) > 0:
+            if vtsource_url == '':
+                vtsource_url = r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf'
+            vtsource = {
+                'mvt':{
+                    'type':'vector',
+                    'tiles':[vtsource_url]
+                }
             }
-        }
-        mbsources.update(vtsource)
+            mbsources.update(vtsource)
 
         mbstyle = {
             'version':8,
