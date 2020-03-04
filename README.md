@@ -13,7 +13,7 @@ Another, generate style.json and also MVT files - tiled .pbf files.
 1. In menu bar, Web->MBStyleGenerator, then a dialog will be shown.
 <img src='img/usage1.png'>
 
-2. You set some paramaters, following
+2. Set following paramaters
 - Output Path (style.json will be written)
 - MVT Source Url (.pbf files URL, Optional)
 - Make MVT Source or not
