@@ -11,13 +11,18 @@ Another, generate style.json and also MVT files - tiled .pbf files.
 
 ## Usage
 In menu bar, Web->MBStyleGenerator, then a dialog will be shown.
+<img src='img/usage1.png'>
+
 You set some paramaters, following
 - Output Path (style.json will be written)
 - MVT Source Url (.pbf files URL, Optional)
 - Make MVT Source or not
 
+<img src='img/usage2.png'>
+
 Press Run and style.json will be generated on the directory you choosed.
 It takes some minuites to make MVT Source, many vector means longer time to make.
+<img src='img/usage3.png'>
 
 ## Tips
 - This plugin will read only VISIBLE layers on your project, including raster tile.
