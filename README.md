@@ -10,22 +10,22 @@ One, to generate only Mapbox Style file style.json.
 Another, generate style.json and also MVT files - tiled .pbf files.
 
 ## Usage
-In menu bar, Web->MBStyleGenerator, then a dialog will be shown.
+1. In menu bar, Web->MBStyleGenerator, then a dialog will be shown.
 <img src='img/usage1.png'>
 
-You set some paramaters, following
+2. You set some paramaters, following
 - Output Path (style.json will be written)
 - MVT Source Url (.pbf files URL, Optional)
 - Make MVT Source or not
 
 <img src='img/usage2.png'>
 
-Press Run and style.json will be generated on the directory you choosed.
-It takes some minuites to make MVT Source, many vector means longer time to make.
+3. Press Run and then style.json will be generated on the directory you choosed.
+It takes some seconds or more to make MVT Source, many vector means longer time.
 <img src='img/usage3.png'>
 
 ## Tips
-- This plugin will read only VISIBLE layers on your project, including raster tile.
+- This plugin will read all VISIBLE layers on your project, including raster tile.
 - When MVT Source URL are not set but any vector layer are visible on your project, you have to set hosting URL of MVT Source on style.json manualy.
 - A layer name in MVT Source is same to the name in QGIS project.
 
