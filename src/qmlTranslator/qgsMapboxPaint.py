@@ -78,4 +78,8 @@ class QgsMapboxPaint:
         mbsize = 1
         if qgsunit == 'MM':
             mbsize = mbsize + math.floor(float(qgssize) * 2.83465)
+        elif qgsunit == 'Point':
+            mbsize = qgssize
+        elif qgsunit == 'Pixel':
+            mbsize = mbsize + math.floor(float(qgssize) * 0.75)
         return mbsize
