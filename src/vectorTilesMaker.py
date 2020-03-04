@@ -28,13 +28,11 @@ class VectorTilesMaker:
 
     def write_tmp_geojson(self, layer: QgsVectorLayer) -> str:
         filename = TMP_GEOJSON_PATH + '/' + layer.id() + '.geojson'
-        crs = QgsCoordinateReferenceSystem()
-        crs.createFromUserInput('WGS84')
         QgsVectorFileWriter.writeAsVectorFormat(
             layer=layer,
             fileName=filename,
             fileEncoding='utf-8',
-            destCRS=crs,
+            destCRS=QgsCoordinateReferenceSystem('WGS84'),
             driverName='GeoJSON'
         )
         return filename
