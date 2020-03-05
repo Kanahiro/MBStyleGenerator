@@ -2,6 +2,8 @@ from qgis.core import QgsProject, QgsMapLayer, QgsMapLayerStyle, QgsRasterLayer,
 from .qmlTranslator import QmlTranslator
 from .vectorTilesMaker import VectorTilesMaker
 
+PLACEHOLDER_URL = r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf'
+
 class StyleManager:
     def __init__(self, project: QgsProject):
         self.project = project
@@ -17,9 +19,7 @@ class StyleManager:
         #mapbox layers making
         for layer in visible_layers:
             mblayer = {}
-            ls = QgsMapLayerStyle()
-            ls.readFromLayer(layer)
-            qml_str = ls.xmlData()
+            qml_str = self._qml_of(layer)
             qmlt = QmlTranslator(qml_str)
             if layer.type() == QgsMapLayer.VectorLayer:
                 vector_layers.append(layer)
@@ -50,7 +50,7 @@ class StyleManager:
         ##VECTOR
         if len(vector_layers) > 0:
             if vtsource_url == '':
-                vtsource_url = r'http://MVT_HOSTING_URL/{z}/{x}/{y}.pbf'
+                vtsource_url = PLACEHOLDER_URL
             vtsource = {
                 'mvt':{
                     'type':'vector',
