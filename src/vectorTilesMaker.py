@@ -6,7 +6,7 @@ class VectorTilesMaker:
     def __init__(self, layers: [QgsVectorLayer]):
         self.layers = layers
 
-    def generateBinaryTiles(self, output_path, maxzoom=18, minzoom=0):
+    def generateBinaryTiles(self, output_path, maxzoom=16, minzoom=0):
         processing.run('native:writevectortiles_xyz', {
             'EXTENT': None,
             'LAYERS': self.make_dict_for_processing(),
