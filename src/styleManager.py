@@ -1,4 +1,8 @@
+import os
+
 from qgis.core import QgsProject, QgsMapLayer, QgsMapLayerStyle, QgsRasterLayer, QgsVectorLayer
+import processing
+
 from .qmlTranslator import QmlTranslator
 from .vectorTilesMaker import VectorTilesMaker
 
@@ -8,7 +12,7 @@ class StyleManager:
     def __init__(self, project: QgsProject):
         self.project = project
 
-    def write_mbstyle(self, output_path:str, vtsource_url:str, isMVTMakeMode:bool):
+    def write_mbstyle(self, output_path:str, vtsource_url:str, is_mvt_mode:bool):
         import json
         visible_layers = self._get_visible_layers()
 
@@ -65,12 +69,12 @@ class StyleManager:
             'layers':mblayers
         }
 
-        with open(output_path + '/style.json', 'w') as f:
+        with open(os.path.join(output_path, 'style.json'), 'w') as f:
             json.dump(mbstyle, f, indent=4)
 
-        if isMVTMakeMode:
+        if is_mvt_mode:
             vtmaker = VectorTilesMaker(vector_layers)
-            vtmaker.generateBinaryTiles(output_path + '/pbf')
+            vtmaker.generateBinaryTiles(os.path.join(output_path, 'pbf'))
 
     def _make_raster_source(self, rlayer:QgsRasterLayer) -> dict:
         import urllib.parse

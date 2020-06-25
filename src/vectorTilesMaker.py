@@ -1,38 +1,25 @@
-import os
-import tempfile
-import json
-from qgis.core import QgsMapLayer, QgsVectorLayer, QgsVectorFileWriter, QgsCoordinateReferenceSystem
-from .ex_lib.togeojsontiles import togeojsontiles
-from .ex_lib.mbutil import mbutil
+import processing
+from qgis.core import QgsVectorLayer
 
-TIPPECANOE_PATH = os.path.dirname(__file__) + '/ex_lib/tippecanoe/'
-TMP_MBTILES_PATH = tempfile.gettempdir() + '/tmp.mbtiles'
-TMP_GEOJSON_PATH = tempfile.gettempdir()
 
 class VectorTilesMaker:
     def __init__(self, layers: [QgsVectorLayer]):
         self.layers = layers
 
-    def generateBinaryTiles(self, output_path, maxzoom=22, minzoom=0):
-        geojson_filepaths = []
-        for layer in self.layers:
-            geojson_filepath = self.write_tmp_geojson(layer)
-            geojson_filepaths.append(geojson_filepath)
-        togeojsontiles.geojson_to_mbtiles(
-            filepaths=geojson_filepaths,
-            tippecanoe_dir=TIPPECANOE_PATH,
-            mbtiles_file=TMP_MBTILES_PATH,
-            extra_args=('-pC',)
-        )
-        mbutil.mbtiles_to_disk(TMP_MBTILES_PATH, output_path, format='pbf', scheme='xyz')
+    def generateBinaryTiles(self, output_path, maxzoom=16, minzoom=0):
+        processing.run('native:writevectortiles_xyz', {
+            'EXTENT': None,
+            'LAYERS': self.make_dict_for_processing(),
+            'MIN_ZOOM': minzoom,
+            'MAX_ZOOM': maxzoom,
+            'XYZ_TEMPLATE': r'{z}/{x}/{y}.pbf',
+            'OUTPUT_DIRECTORY': output_path
+        })
 
-    def write_tmp_geojson(self, layer: QgsVectorLayer) -> str:
-        filename = TMP_GEOJSON_PATH + '/' + layer.id() + '.geojson'
-        QgsVectorFileWriter.writeAsVectorFormat(
-            layer=layer,
-            fileName=filename,
-            fileEncoding='utf-8',
-            destCRS=QgsCoordinateReferenceSystem('WGS84'),
-            driverName='GeoJSON'
-        )
-        return filename
+    def make_dict_for_processing(self):
+        dicts_for_processing = []
+        for layer in self.layers:
+            tmp_dict = {}
+            tmp_dict['layer'] = layer
+            dicts_for_processing.append(tmp_dict)
+        return dicts_for_processing

@@ -82,18 +82,17 @@ class MBStyleGenerator:
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('MBStyleGenerator', message)
 
-
     def add_action(
-        self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+            self,
+            icon_path,
+            text,
+            callback,
+            enabled_flag=True,
+            add_to_menu=True,
+            add_to_toolbar=True,
+            status_tip=None,
+            whats_this=None,
+            parent=None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -170,7 +169,6 @@ class MBStyleGenerator:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -178,7 +176,6 @@ class MBStyleGenerator:
                 self.tr(u'&MBStyleGenerator'),
                 action)
             self.iface.removeToolBarIcon(action)
-
 
     def run(self):
         """Run method that performs all the real work"""
@@ -192,7 +189,7 @@ class MBStyleGenerator:
         # show the dialog
         self.dlg.show()
         self.initDialog()
-        
+
     def initDialog(self):
         openFileDialogButton = self.dlg.openFileDialogButton
         openFileDialogButton.clicked.connect(self.openFileDialogButtonPushed)
@@ -201,8 +198,9 @@ class MBStyleGenerator:
 
     def openFileDialogButtonPushed(self):
         from qgis.PyQt.QtWidgets import QFileDialog
-        filepath = QFileDialog.getExistingDirectory(caption = "Select Directory", directory = '')
-        ##if canceled
+        filepath = QFileDialog.getExistingDirectory(
+            caption="Select Directory", directory='')
+        # if canceled
         if not filepath:
             return
         self.dlg.stylejson_output.setText(filepath)
@@ -217,14 +215,15 @@ class MBStyleGenerator:
             return
 
         self.generateStyle(output_path=stylejson_output,
-                            mvtsource_url=mvtsource_url,
-                            isMVTmakeMode=makeSourceCheckBox
-                            )
+                           mvtsource_url=mvtsource_url,
+                           isMVTmakeMode=makeSourceCheckBox
+                           )
 
-        self.iface.messageBar().pushMessage("Info", "Style.json was correctly saved:" + stylejson_output, Qgis.Info)
+        self.iface.messageBar().pushMessage(
+            "Info", "Style.json was correctly saved:" + stylejson_output, Qgis.Info)
         self.dlg.reject()
 
-    def generateStyle(self, output_path:str, mvtsource_url='', isMVTmakeMode=False):
+    def generateStyle(self, output_path: str, mvtsource_url='', isMVTmakeMode=False):
         from qgis.core import QgsProject
         from .src.styleManager import StyleManager
         from .src.vectorTilesMaker import VectorTilesMaker
