@@ -31,10 +31,6 @@ It takes some seconds or more to make MVT Source, many vector means longer time.
 
 ## License
 This plugin is distributed under GPL-2 License.
-Also, this plugin use following libraries.
-- [mapbox/tippecanoe](https://github.com/mapbox/tippecanoe)
-- [bartromgens/togeojsontiles](https://github.com/bartromgens/togeojsontiles)
-- [mapbox/mbutil](https://github.com/mapbox/mbutil)
 
 ## Classes
 <img src='img/classes.png'>
