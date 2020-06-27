@@ -4,9 +4,9 @@
 
 [general]
 name=MBStyleGenerator
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.14
 description=Generate customised MBStyle - style.json, tiles.json, and also tiled .PBFs
-version=0.1
+version=0.2
 author=Kanahiro Iguchi
 email=kanahiro.iguchi@gmail.com
 
